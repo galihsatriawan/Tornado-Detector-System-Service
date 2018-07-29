@@ -1,6 +1,6 @@
 <?php
 // API access key from Google API's Console
-include 'database_handler.php';
+// include 'database_handler.php';
 
 
 // if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -13,10 +13,7 @@ if(isset($send)){
 // if(true){
 	
 	// $query = mysqli_query($con,$sql);
-	$fields = array();
-	$params = array();
-	$values = array();
-	$query = select_data("tb_mst_token",$fields,$params,$values);
+	
 	// print_r($query);
 	$result = array();
 	// $hasil = mysqli_fetch_all($query);
@@ -56,7 +53,7 @@ if(isset($send)){
 		$result = curl_exec($ch);
 		curl_close($ch);
 
-		$respon['Pesan'] = "Good ".$con->error.$token_tujuan;
+		$respon['Pesan'] = "Good ".$con->error;
 		$respon['id_arduino'] = 1;
 		echo json_encode($respon);
 		

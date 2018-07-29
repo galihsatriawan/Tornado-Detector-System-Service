@@ -11,9 +11,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	$fields = array("token");
 	$values = array($token);
 	insert_data("tb_mst_token",$fields,$values);
-	$respon['Pesan']= "Berhasil"." ".$token;
+	$respon['note']= "Berhasil"." ".$token;
 	echo json_encode($respon);
-	
+
 }else{
 
 		$respon["status"] = "ok";
