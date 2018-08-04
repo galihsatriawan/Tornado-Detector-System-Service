@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
     private static Retrofit retrofit;
-    private static final String BASE_URL = "http://gitasoft.hol.es/Tornado_service/Tornado_service";
+    private static final String BASE_URL = "http://gitasoft.hol.es/Tornado_service/Tornado_service/";
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
