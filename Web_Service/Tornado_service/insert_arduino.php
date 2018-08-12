@@ -14,7 +14,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	$fields = array("name","location","altitude","longtitude");
 	$values = array($name,$location,$altitude,$longtitude);
 	insert_data("tb_mst_arduino",$fields,$values);
-	$respon['Pesan']= "Berhasil"." ".$token;
+	$respon['Pesan']= "Berhasil"." ".$name;
 	echo json_encode($respon);
 	
 }else{
