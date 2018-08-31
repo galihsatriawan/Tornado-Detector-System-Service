@@ -8,6 +8,11 @@
 #define bd 8
 #define barat 9
 #define bl 10
+// Servo Position
+int time_pulled = 0;
+bool pulled = false;
+int maxTime = 1000*60*10;
+
 //Rain Sensor
 int nRainIn = A1;
 int nRainDigitalIn = 12;
@@ -69,14 +74,29 @@ Serial.println();
 
 void loop()
 {
-  
-   // start dari 0 derajar sampai 180 derajat 
+  //if pulled , count the time
+  if(pulled){
+    time_pulled ++;
+  }else time_pulled = 0;
+
+  if(time_pulled == maxTime){
+    // start dari 180 derajat ke 0 derajat , ulurkan
+       for(pos = 180; pos>=1; pos-=2)  
+       {
+        // memberitahu servo untuk pergi ke posisi  'pos'                                
+        myservo.write(pos);                 
+        // tunggu 15ms untuk pencapaian  posisi servo    
+        delay(15);                        
+       }
+       pulled = false;
+  }
+   
  
   Sample++;
   Serial.print(Sample);
   Serial.print(": Start measurement…");
   windvelocity();
-  Serial.println(" finished.");
+  Serial.println("t finished.");
   Serial.print("Counter: ");
   Serial.print(counter);
   Serial.print("; RPM: ");
@@ -90,6 +110,12 @@ void loop()
   Serial.print(" [km/h]");
   Serial.println();
   if(fixSpeed<=20){
+    
+    Serial.println("Keterangan : Aman");
+   
+  }else if(fixSpeed<=40){
+    pulled = true;
+    // start dari 0 derajar sampai 180 derajat 
      for(pos = 0; pos < 180; pos += 4)  
        {
         // pada posisi 1 derajat
@@ -100,17 +126,7 @@ void loop()
         // tunggu 15ms untuk pencapaian  posisi servo    
         delay(15);                  
        } 
-       // start dari 180 derajat ke 0 derajat 
-       for(pos = 180; pos>=1; pos-=1)  
-       {
-        // memberitahu servo untuk pergi ke posisi  'pos'                                
-        myservo.write(pos);                 
-        // tunggu 15ms untuk pencapaian  posisi servo    
-        delay(15);                        
-       }
-    Serial.println("Keterangan : Aman");
-   
-  }else if(fixSpeed<=40){
+       
     Serial.println("Keterangan : Awas");
   }else if(fixSpeed>40){
     Serial.println("Keterangan : Bahaya");
