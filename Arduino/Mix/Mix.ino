@@ -11,7 +11,7 @@
 // Servo Position
 int time_pulled = 0;
 bool pulled = false;
-int maxTime = 1000*60*10;
+int maxTime = 5;
 
 //Rain Sensor
 int nRainIn = A1;
@@ -37,10 +37,10 @@ float speedwind = 0; // Wind speed (m/s)
 
 void setup()
 {
-myservo.detach();
-  myservo.attach(11);
-  myservo.write(180);
 
+  myservo.attach(11);
+  pulled = false;
+  myservo.write(10);
 // sets the serial port to 9600
 Serial.begin(115200);
 // Set the pins
@@ -75,13 +75,16 @@ Serial.println();
 void loop()
 {
   //if pulled , count the time
+  Serial.println(time_pulled);
   if(pulled){
     time_pulled ++;
   }else time_pulled = 0;
 
   if(time_pulled == maxTime){
     // start dari 180 derajat ke 0 derajat , ulurkan
-       for(pos = 180; pos>=1; pos-=2)  
+       Serial.println("Balik");
+       for(pos = 179; pos>=10; pos-=2)  
+       
        {
         // memberitahu servo untuk pergi ke posisi  'pos'                                
         myservo.write(pos);                 
@@ -114,6 +117,7 @@ void loop()
     Serial.println("Keterangan : Aman");
    
   }else if(fixSpeed<=40){
+    Serial.println("Tarik");
     pulled = true;
     // start dari 0 derajar sampai 180 derajat 
      for(pos = 0; pos < 180; pos += 4)  
@@ -129,6 +133,23 @@ void loop()
        
     Serial.println("Keterangan : Awas");
   }else if(fixSpeed>40){
+    
+    if(!pulled){
+      Serial.println("Tarik 2");
+      pulled = true;
+    // start dari 0 derajar sampai 180 derajat 
+     for(pos = 0; pos < 180; pos += 4)  
+       {
+        // pada posisi 1 derajat
+        // memberitahu servo untuk pergi ke posisi  'pos'
+       
+        myservo.write(pos);                 
+       
+        // tunggu 15ms untuk pencapaian  posisi servo    
+        delay(15);                  
+       } 
+       
+    }
     Serial.println("Keterangan : Bahaya");
         
   }
