@@ -8,10 +8,7 @@
 #define bd 8
 #define barat 9
 #define bl 10
-// Servo Position
-int time_pulled = 0;
-bool pulled = false;
-int maxTime = 5;
+
 
 //Rain Sensor
 int nRainIn = A1;
@@ -34,13 +31,27 @@ unsigned int Sample = 0; // Sample number
 unsigned int counter = 0; // B/W counter for sensor
 unsigned int RPM = 0; // Revolutions per minute
 float speedwind = 0; // Wind speed (m/s)
-
+// Servo Position
+int time_pulled = 0;
+bool pulled = false;
+const int maxTime = 1*10;
+const int jeda_putar = 1000*3;
+void tarik(){
+  myservo.write(0);
+  delay(jeda_putar);
+  myservo.write(90);
+}
+void ulur(){
+  myservo.write(180);
+  delay(jeda_putar);
+  myservo.write(90);
+}
 void setup()
 {
 
   myservo.attach(11);
   pulled = false;
-  myservo.write(10);
+  
 // sets the serial port to 9600
 Serial.begin(115200);
 // Set the pins
@@ -83,14 +94,8 @@ void loop()
   if(time_pulled == maxTime){
     // start dari 180 derajat ke 0 derajat , ulurkan
        Serial.println("Balik");
-       for(pos = 179; pos>=10; pos-=2)  
-       
-       {
-        // memberitahu servo untuk pergi ke posisi  'pos'                                
-        myservo.write(pos);                 
-        // tunggu 15ms untuk pencapaian  posisi servo    
-        delay(15);                        
-       }
+       //ulur 
+       ulur();
        pulled = false;
   }
    
@@ -120,16 +125,7 @@ void loop()
     Serial.println("Tarik");
     pulled = true;
     // start dari 0 derajar sampai 180 derajat 
-     for(pos = 0; pos < 180; pos += 4)  
-       {
-        // pada posisi 1 derajat
-        // memberitahu servo untuk pergi ke posisi  'pos'
-       
-        myservo.write(pos);                 
-       
-        // tunggu 15ms untuk pencapaian  posisi servo    
-        delay(15);                  
-       } 
+     tarik();
        
     Serial.println("Keterangan : Awas");
   }else if(fixSpeed>40){
@@ -137,17 +133,8 @@ void loop()
     if(!pulled){
       Serial.println("Tarik 2");
       pulled = true;
-    // start dari 0 derajar sampai 180 derajat 
-     for(pos = 0; pos < 180; pos += 4)  
-       {
-        // pada posisi 1 derajat
-        // memberitahu servo untuk pergi ke posisi  'pos'
-       
-        myservo.write(pos);                 
-       
-        // tunggu 15ms untuk pencapaian  posisi servo    
-        delay(15);                  
-       } 
+      tarik();
+      
        
     }
     Serial.println("Keterangan : Bahaya");
@@ -182,7 +169,7 @@ void loop()
   Serial.print(nRainVal);
   Serial.print(",");
   Serial.println(fixSpeed);
-  delay(1000);
+  
 }
 
 // Measure wind speed
