@@ -14,10 +14,10 @@ import retrofit2.http.POST;
 
 public interface InterfaceApi {
     @FormUrlEncoded
-    @POST("get_data.php")
+    @POST("Service/get_data.php")
     Call<Data> get_data(@Field("token") String token);
 
     @FormUrlEncoded
-    @POST("insert_token.php")
+    @POST("Service/insert_token.php")
     Call<Note> insert_token(@Field("token") String token);
 }

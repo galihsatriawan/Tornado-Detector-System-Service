@@ -2,6 +2,7 @@ package anton.tornado.detector.system;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,12 +22,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.util.Calendar;
+
 
 public class MainActivity extends AppCompatActivity {
     TextView txtWindSpeed;
     TextView txtLocation;
     TextView txtIndication;
     Button btnRefresh;
+    String tokenku ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,16 +41,31 @@ public class MainActivity extends AppCompatActivity {
         txtIndication= findViewById(R.id.indication);
         // Get token
         final String token = FirebaseInstanceId.getInstance().getToken();
+        tokenku = token;
         btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 get_data(token);
             }
         });
-
-        insert_token(token);
         get_data(token);
+        insert_token(token);
     }
+    final Handler handler = new Handler();
+    boolean test = new Handler().postDelayed(new Runnable() {
+
+        @Override
+        public void run() {
+            Log.d("Anton", "run: Again");
+            try{
+                get_data(tokenku);
+            }catch(Exception e){
+                Log.d("Anton", "run: "+e.getMessage());
+            }
+
+            handler.postDelayed(this, 10000);
+        }
+    }, 10000);
     private ProgressDialog mProgressDialog;
 
     public void showProgressDialog(Context ctx) {

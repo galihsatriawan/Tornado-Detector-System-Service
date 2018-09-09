@@ -8,15 +8,16 @@ include 'database_handler.php';
 // 		$values = array();
 // $arduino = select_data("tb_mst_arduino",$fields,array("id_arduino"),array(2));
 // echo $arduino[0]['lokasi'];
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
+if(($_SERVER['REQUEST_METHOD'] == 'POST')||($_SERVER['REQUEST_METHOD'] == 'GET') && (isset($_GET['wind_speed']))){
 // if(true){
-	$var_1 = $_POST['wind_speed'];
+
+	$var_1 = isset($_POST)? $_POST['wind_speed']:$_GET['wind_speed'];
 	// $var_1 = 3.0;
 	// $id = "test";
-	$id = $_POST['id_arduino'];
+	$id = isset($_POST)? $_POST['id_arduino']:$_GET['id_arduino'];
 	$date = date("Y-m-d H:m:s");
 	// What do we send for
-	$note = $_POST['note'];
+	$note = isset($_POST) ? $_POST['note'] : $_GET['note'];
 	if($var_1>=90){
 		// Send Notif
 		$send = "send";
@@ -97,7 +98,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	insert_data("tb_mst_data",$fields,$values);
 	$respon['Pesan']= "Berhasil"." ".$id;
 	echo json_encode($respon);
-	header("Location: /View/Input_data.php");
+	//header("Location: /View/Input_data.php");
 }else{
 
 		$respon["status"] = "ok";

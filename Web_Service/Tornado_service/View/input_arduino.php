@@ -4,7 +4,7 @@
 	<title>Tornado Detector System</title>
 </head>
 <body>
-    <?php include '../database_handler.php'; 
+    <?php include '../Service/database_handler.php'; 
     $fields = array();
     $params = array();
     $values = array();
@@ -17,7 +17,7 @@
 		</h1>
 	<div class="wrapper" align="center">
 	<table>
-		<form id="form_data"  action="../insert_arduino.php" method="POST">
+		<form id="form_data"  action="../Service/insert_arduino.php" method="POST">
 			
 		<tr>
 			<td>Nama Arduino</td>
