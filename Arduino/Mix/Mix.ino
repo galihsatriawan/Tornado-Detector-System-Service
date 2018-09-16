@@ -14,6 +14,9 @@
 
 String Arsp, Grsp;
 SoftwareSerial gprsSerial(5, 6); // RX, TX
+bool kirim = false;
+int time_kirim = 60; //1 minutes
+int sec =0;
 
 //Rain Sensor
 int nRainIn = A1;
@@ -145,13 +148,7 @@ char fulls[255];
 int arduino_id = 1;
 void loop()
 {
-  // Sim 800L 
-  // initialize http service
   
-   gprsSerial.println("AT+HTTPINIT");
-   delay(2000); 
-   toSerial();
-   
   //if pulled , count the time
   Serial.println(time_pulled);
   if(pulled){
@@ -191,13 +188,14 @@ void loop()
    
   }else if(fixSpeed<=40){
     Serial.println("Tarik");
+    kirim = true;
     pulled = true;
     // start dari 0 derajar sampai 180 derajat 
      tarik();
     noteku = "Awas";   
     Serial.println("Keterangan : Awas");
   }else if(fixSpeed>40){
-    
+    kirim = true;
     if(!pulled){
       Serial.println("Tarik 2");
       pulled = true;
@@ -237,7 +235,17 @@ void loop()
   Serial.print(nRainVal);
   Serial.print(",");
   Serial.println(fixSpeed);
-  // Sim 800l Send data
+  
+  if((sec%time_kirim ==0)||(kirim)){
+    sec = 0 ;
+    kirim = false;
+  // Sim 800L 
+  // initialize http service
+  
+   gprsSerial.println("AT+HTTPINIT");
+   delay(2000); 
+   toSerial();
+   // Sim 800l Send data
     snprintf(fulls,sizeof fulls,"at+httppara=\"URL\",\"http://antontds.com/Service/insert_from_form.php?id_arduino=%d&wind_speed=%d&note=%s\"",arduino_id,fixSpeed,noteku);
 //   gprsSerial.println("AT+HTTPPARA=\"URL\",\"http://antontds.com/Service/insert_from_form.php?id_arduino="" + id +""&wind_speed=""+wind+""&note=""+note+ ""\"");
    gprsSerial.println(fulls);
@@ -262,6 +270,9 @@ void loop()
 
    gprsSerial.println("");
    delay(2000);
+  }
+  
+  sec++;
 }
 
 // Measure wind speed
