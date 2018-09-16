@@ -84,7 +84,7 @@ void loop() {
 
    // set http action type 0 = GET, 1 = POST, 2 = HEAD
    gprsSerial.println("AT+HTTPACTION=0");
-   delay(3000);
+   delay(2000);
    toSerial();
 
    // read server response

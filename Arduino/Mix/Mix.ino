@@ -2,13 +2,18 @@
 # define windPin 2 // Receive the data from sensor
 #define utara 3
 #define tl 4
-#define timur 5
-#define tenggara 6
+#define timur 0
+#define tenggara 1
 #define selatan 7
 #define bd 8
 #define barat 9
 #define bl 10
 
+// Sim 800L
+#include <SoftwareSerial.h>
+
+String Arsp, Grsp;
+SoftwareSerial gprsSerial(5, 6); // RX, TX
 
 //Rain Sensor
 int nRainIn = A1;
@@ -46,6 +51,15 @@ void ulur(){
   delay(jeda_putar);
   myservo.write(90);
 }
+
+void toSerial()
+{
+  while(gprsSerial.available()!=0)
+  {
+    Serial.write(gprsSerial.read());
+  }
+}
+
 void setup()
 {
 
@@ -53,7 +67,7 @@ void setup()
   pulled = false;
   
 // sets the serial port to 9600
-Serial.begin(115200);
+Serial.begin(9600);
 // Set the pins
 
 
@@ -70,6 +84,50 @@ digitalWrite(2, HIGH);
   //Rain
   pinMode(12,INPUT);
 
+// Sim 800L
+Serial.println("Testing GSM SIM800L");
+  gprsSerial.begin(4800);
+  //Set Awal 
+  Serial.println("Config SIM900...");
+  delay(2000);
+  Serial.println("Done!...");
+  gprsSerial.flush();
+  Serial.flush();
+gprsSerial.println("AT+SAPBR=0,1");
+  delay(2000);
+  toSerial();
+  
+  gprsSerial.println("AT+CREG?");
+  delay(100);
+  toSerial();
+  gprsSerial.println("AT+CFUN=1");
+  delay(100);
+  toSerial();
+//  // attach or detach from GPRS service 
+  gprsSerial.println("AT+COPS?");
+  delay(100);
+  toSerial();
+
+
+  // bearer settings
+  gprsSerial.println("AT+SAPBR=3,1,\"Contype\",\"GPRS\"");
+  delay(2000);
+  toSerial();
+
+  // bearer settings
+  gprsSerial.println("AT+SAPBR=3,1,\"APN\",\"internet\"");
+  delay(2000);
+  toSerial();
+  
+  // bearer settings
+  gprsSerial.println("AT+SAPBR=1,1");
+  delay(2000);
+  toSerial();
+  // bearer settings
+  gprsSerial.println("AT+SAPBR=2,1");
+  delay(2000);
+  toSerial();
+
 // Splash screen
 Serial.println("ANEMOMETER");
 Serial.println("**********");
@@ -82,9 +140,18 @@ Serial.println(" seconds.");
 Serial.println("** You could modify those values on code **");
 Serial.println();
 }
-
+char* noteku="War";
+char fulls[255];
+int arduino_id = 1;
 void loop()
 {
+  // Sim 800L 
+  // initialize http service
+  
+   gprsSerial.println("AT+HTTPINIT");
+   delay(2000); 
+   toSerial();
+   
   //if pulled , count the time
   Serial.println(time_pulled);
   if(pulled){
@@ -117,8 +184,9 @@ void loop()
   //Serial.print(" [m/s]");
   Serial.print(" [km/h]");
   Serial.println();
+  
   if(fixSpeed<=20){
-    
+    noteku = "Aman";
     Serial.println("Keterangan : Aman");
    
   }else if(fixSpeed<=40){
@@ -126,7 +194,7 @@ void loop()
     pulled = true;
     // start dari 0 derajar sampai 180 derajat 
      tarik();
-       
+    noteku = "Awas";   
     Serial.println("Keterangan : Awas");
   }else if(fixSpeed>40){
     
@@ -137,11 +205,11 @@ void loop()
       
        
     }
+    noteku = "Bahaya";   
     Serial.println("Keterangan : Bahaya");
         
   }
   
-
   // Arah Angin
   if(digitalRead(utara)==LOW){Serial.println("ARAH ANGIN : UTARA");}
   else if(digitalRead(tl)==LOW){Serial.println("ARAH ANGIN : TIMUR LAUT");}
@@ -169,7 +237,31 @@ void loop()
   Serial.print(nRainVal);
   Serial.print(",");
   Serial.println(fixSpeed);
-  
+  // Sim 800l Send data
+    snprintf(fulls,sizeof fulls,"at+httppara=\"URL\",\"http://antontds.com/Service/insert_from_form.php?id_arduino=%d&wind_speed=%d&note=%s\"",arduino_id,fixSpeed,noteku);
+//   gprsSerial.println("AT+HTTPPARA=\"URL\",\"http://antontds.com/Service/insert_from_form.php?id_arduino="" + id +""&wind_speed=""+wind+""&note=""+note+ ""\"");
+   gprsSerial.println(fulls);
+   delay(2000);
+   toSerial();
+
+   // set http action type 0 = GET, 1 = POST, 2 = HEAD
+   gprsSerial.println("AT+HTTPACTION=0");
+   delay(2000);
+   toSerial();
+
+
+   // read server response
+   gprsSerial.println("AT+HTTPREAD"); 
+   delay(1000);
+   toSerial();
+
+   gprsSerial.println("");
+   gprsSerial.println("AT+HTTPTERM");
+   toSerial();
+   delay(300);
+
+   gprsSerial.println("");
+   delay(2000);
 }
 
 // Measure wind speed
