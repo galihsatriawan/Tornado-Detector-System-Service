@@ -18,7 +18,7 @@ if(($_SERVER['REQUEST_METHOD'] == 'POST')||($_SERVER['REQUEST_METHOD'] == 'GET')
 	$date = date("Y-m-d H:m:s");
 	// What do we send for
 	$note = isset($_POST) ? $_POST['note'] : $_GET['note'];
-	if($var_1>=90){
+	if($var_1>40){
 		// Send Notif
 		$send = "send";
 		$fields = array();

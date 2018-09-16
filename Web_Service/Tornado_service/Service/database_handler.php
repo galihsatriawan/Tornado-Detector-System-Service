@@ -1,5 +1,7 @@
 <?php
 	 $GLOBALS['conn'] = null;
+	 
+	 
 	function pdo_connect(){
 
 		$server = "localhost";

@@ -1,4 +1,5 @@
 #include <SoftwareSerial.h>
+#include <gprs.h>
 
 String Arsp, Grsp;
 SoftwareSerial gsm(10, 11); // RX, TX
@@ -6,9 +7,9 @@ SoftwareSerial gsm(10, 11); // RX, TX
 void setup() {
   // put your setup code here, to run once:
 
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println("Testing GSM SIM800L");
-  gsm.begin(115200);
+  gsm.begin(9600);
 
 }
 

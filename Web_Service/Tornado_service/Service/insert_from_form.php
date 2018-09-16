@@ -8,17 +8,19 @@ include 'database_handler.php';
 // 		$values = array();
 // $arduino = select_data("tb_mst_arduino",$fields,array("id_arduino"),array(2));
 // echo $arduino[0]['lokasi'];
-if(($_SERVER['REQUEST_METHOD'] == 'POST')||($_SERVER['REQUEST_METHOD'] == 'GET')){
+if(($_SERVER['REQUEST_METHOD'] == 'POST')||($_SERVER['REQUEST_METHOD'] == 'GET') &&isset($_GET['wind_speed'])){
 // if(true){
-
-	$var_1 = isset($_POST)? $_POST['wind_speed']:$_GET['wind_speed'];
+    print_r($_GET);
+    
+	$var_1 = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST['wind_speed']:$_GET['wind_speed'];
 	// $var_1 = 3.0;
 	// $id = "test";
-	$id = isset($_POST)? $_POST['id_arduino']:$_GET['id_arduino'];
+	$id = ($_SERVER['REQUEST_METHOD'] == 'POST')? $_POST['id_arduino']:$_GET['id_arduino'];
 	$date = date("Y-m-d H:m:s");
 	// What do we send for
-	$note = isset($_POST) ? $_POST['note'] : $_GET['note'];
-	if($var_1>=90){
+	$note = ($_SERVER['REQUEST_METHOD'] == 'POST')? $_POST['note'] : $_GET['note'];
+	echo $var_1." ".$id." ".$note;
+	if($var_1>40){
 		// Send Notif
 		$send = "send";
 		$fields = array();
@@ -90,7 +92,12 @@ if(($_SERVER['REQUEST_METHOD'] == 'POST')||($_SERVER['REQUEST_METHOD'] == 'GET')
 		$indication = "F1";
 	}else if($var_1>=90){
 		$indication = "F0";
-	}else{
+	}else if($var_1>40) {
+	   $indication = "Bahaya";
+	}else if($var_1>20) {
+	   $indication = "Bahaya";
+	}        
+    else{
 		$indication = "Normal";
 	}
 	$fields = array("var_1","id_arduino","tgl_data","indication");
