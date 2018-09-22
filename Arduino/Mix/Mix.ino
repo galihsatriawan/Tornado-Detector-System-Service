@@ -13,10 +13,10 @@
 #include <SoftwareSerial.h>
 
 String Arsp, Grsp;
-SoftwareSerial gprsSerial(5, 6); // RX, TX
+SoftwareSerial gprsSerial(5,6); // RX, TX
 bool kirim = false;
-int time_kirim = 60; //1 minutes
-int sec =0;
+int time_kirim = 8; //1 minutes
+int sec =1;
 
 //Rain Sensor
 int nRainIn = A1;
@@ -65,38 +65,22 @@ void toSerial()
 
 void setup()
 {
-
-  myservo.attach(11);
-  pulled = false;
-  
-// sets the serial port to 9600
-Serial.begin(9600);
-// Set the pins
-
-
-pinMode(2, INPUT);
-digitalWrite(2, HIGH);
- pinMode(utara,INPUT_PULLUP);
-  pinMode(tl,INPUT_PULLUP);
-  pinMode(timur,INPUT_PULLUP);
-  pinMode(tenggara,INPUT_PULLUP);
-  pinMode(selatan,INPUT_PULLUP);
-  pinMode(bd,INPUT_PULLUP);
-  pinMode(barat,INPUT_PULLUP);
-  pinMode(bl,INPUT_PULLUP);
-  //Rain
-  pinMode(12,INPUT);
-
+Serial.begin(19200);
+gprsSerial.begin(19200);
+//gprsSerial.println("AT+IPR=9600");
 // Sim 800L
 Serial.println("Testing GSM SIM800L");
-  gprsSerial.begin(4800);
+  
   //Set Awal 
-  Serial.println("Config SIM900...");
+  Serial.println("Config SIM800...");
   delay(2000);
   Serial.println("Done!...");
   gprsSerial.flush();
   Serial.flush();
-gprsSerial.println("AT+SAPBR=0,1");
+  gprsSerial.println("AT+IPR=19200");
+  delay(2000);
+  toSerial();
+  gprsSerial.println("AT+SAPBR=0,1");
   delay(2000);
   toSerial();
   
@@ -130,34 +114,75 @@ gprsSerial.println("AT+SAPBR=0,1");
   gprsSerial.println("AT+SAPBR=2,1");
   delay(2000);
   toSerial();
+// initialize http service
+  
+   gprsSerial.println("AT+HTTPINIT");
+   delay(2000); 
+   toSerial();
+   // initialize http service
+  
+   gprsSerial.println("AT+HTTPSSL=0");
+   delay(2000); 
+   toSerial();
+   // initialize http service
+  
+   gprsSerial.println("at+httppara=\"cid\",1");
+   delay(2000); 
+   toSerial();
 
-// Splash screen
-Serial.println("ANEMOMETER");
-Serial.println("**********");
-Serial.println("Based on depoinovasi anemometer sensor");
-Serial.print("Sampling period: ");
-Serial.print(period/1000);
-Serial.print(" seconds every ");
-Serial.print(delaytime/1000);
-Serial.println(" seconds.");
-Serial.println("** You could modify those values on code **");
-Serial.println();
+  myservo.attach(11);
+  pulled = false;
+  
+
+// Set the pins
+
+
+pinMode(2, INPUT);
+digitalWrite(2, HIGH);
+ pinMode(utara,INPUT_PULLUP);
+  pinMode(tl,INPUT_PULLUP);
+  pinMode(timur,INPUT_PULLUP);
+  pinMode(tenggara,INPUT_PULLUP);
+  pinMode(selatan,INPUT_PULLUP);
+  pinMode(bd,INPUT_PULLUP);
+  pinMode(barat,INPUT_PULLUP);
+  pinMode(bl,INPUT_PULLUP);
+  //Rain
+  pinMode(12,INPUT);
+// sets the serial port to 9600
+
+//// Splash screen
+//Serial.println("ANEMOMETER");
+//Serial.println("**********");
+//Serial.println("Based on depoinovasi anemometer sensor");
+//Serial.print("Sampling period: ");
+//Serial.print(period/1000);
+//Serial.print(" seconds every ");
+//Serial.print(delaytime/1000);
+//Serial.println(" seconds.");
+//Serial.println("** You could modify those values on code **");
+//Serial.println();
+//gprsSerial.flush();
+//  Serial.flush();
 }
-char* noteku="War";
+char* noteku ="War";
 char fulls[255];
 int arduino_id = 1;
 void loop()
 {
-  
+  sec++;
+  //gprsSerial.println("AT");
+  //delay(2000);
+  //toSerial();
   //if pulled , count the time
-  Serial.println(time_pulled);
+  //Serial.println(time_pulled);
   if(pulled){
     time_pulled ++;
   }else time_pulled = 0;
 
   if(time_pulled == maxTime){
     // start dari 180 derajat ke 0 derajat , ulurkan
-       Serial.println("Balik");
+//       Serial.println("Balik");
        //ulur 
        ulur();
        pulled = false;
@@ -165,58 +190,109 @@ void loop()
    
  
   Sample++;
+  /*
   Serial.print(Sample);
   Serial.print(": Start measurement…");
-  windvelocity();
+  
   Serial.println("t finished.");
   Serial.print("Counter: ");
   Serial.print(counter);
   Serial.print("; RPM: ");
-  RPMcalc();
+  
   Serial.print(RPM);
   Serial.print("; Wind speed: ");
-  WindSpeed();
-  float fixSpeed = speedwind*3600/1000;
+  
+  
   Serial.print(fixSpeed);
   //Serial.print(" [m/s]");
   Serial.print(" [km/h]");
   Serial.println();
-  
+  */
+  windvelocity();
+  RPMcalc();
+  WindSpeed();
+  float fixSpeed = speedwind*3600/1000;
   if(fixSpeed<=20){
-    noteku = "Aman";
-    Serial.println("Keterangan : Aman");
+    noteku = "Aman\"";
+//    Serial.println("Keterangan : Aman");
    
   }else if(fixSpeed<=40){
-    Serial.println("Tarik");
+//    Serial.println("Tarik");
     kirim = true;
     pulled = true;
     // start dari 0 derajar sampai 180 derajat 
      tarik();
-    noteku = "Awas";   
-    Serial.println("Keterangan : Awas");
+    noteku = "Awas\"";   
+//    Serial.println("Keterangan : Awas");
   }else if(fixSpeed>40){
     kirim = true;
     if(!pulled){
-      Serial.println("Tarik 2");
+//      Serial.println("Tarik 2");
       pulled = true;
       tarik();
       
        
     }
-    noteku = "Bahaya";   
-    Serial.println("Keterangan : Bahaya");
-        
+    noteku = "Bahaya\"";   
+//    Serial.println("Keterangan : Bahaya");      
+  }
+//  Serial.println(noteku);
+  if((sec%time_kirim ==0)||(kirim)){
+    //sec = 1 ;
+  gprsSerial.println("AT+CIPPING");
+   //delay(2000);
+   toSerial();
+    
+    kirim = false;
+  // Sim 800L 
+  
+   // Sim 800l Send data
+   
+   sprintf(fulls,"at+httppara=\"URL\",\"http://antontds.com/Service/insert_from_form.php?id_arduino=%d&wind_speed=%d&note=",arduino_id,fixSpeed);
+   strcat(fulls,noteku);
+   //snprintf(fulls,sizeof fulls,"at+httppara=\"URL\",\"http://antontds.com/Service/insert_from_form.php?id_arduino=%d&wind_speed=%d&note=%s\"",arduino_id,fixSpeed,noteku);
+//   gprsSerial.println("AT+HTTPPARA=\"URL\",\"http://antontds.com/Service/insert_from_form.php?id_arduino="" + id +""&wind_speed=""+wind+""&note=""+note+ ""\"");
+  Serial.println(fulls);
+   gprsSerial.println(fulls);
+   delay(2000);
+   toSerial();
+
+   // set http action type 0 = GET, 1 = POST, 2 = HEAD
+   gprsSerial.println("AT+HTTPACTION=0");
+   delay(4000);
+   toSerial();
+
+
+   // read server response
+   
+   
   }
   
   // Arah Angin
-  if(digitalRead(utara)==LOW){Serial.println("ARAH ANGIN : UTARA");}
-  else if(digitalRead(tl)==LOW){Serial.println("ARAH ANGIN : TIMUR LAUT");}
-  else if(digitalRead(timur)==LOW){Serial.println("ARAH ANGIN : TIMUR");}
-  else if(digitalRead(tenggara)==LOW){Serial.println("ARAH ANGIN : TENGGARA");}
-  else if(digitalRead(selatan)==LOW){Serial.println("ARAH ANGIN : SELATAN");}
-  else if(digitalRead(bd)==LOW){Serial.println("ARAH ANGIN : BARAT DAYA");}
-  else if(digitalRead(barat)==LOW){Serial.println("ARAH ANGIN : BARAT");}
-  else if(digitalRead(bl)==LOW){Serial.println("ARAH ANGIN : BARAT LAUT");}
+  if(digitalRead(utara)==LOW){
+//    Serial.println("ARAH ANGIN : UTARA");
+    }
+  else if(digitalRead(tl)==LOW){
+//    Serial.println("ARAH ANGIN : TIMUR LAUT");
+    }
+  else if(digitalRead(timur)==LOW){
+//    Serial.println("ARAH ANGIN : TIMUR");
+    }
+  else if(digitalRead(tenggara)==LOW){
+//    Serial.println("ARAH ANGIN : TENGGARA");
+  }
+  else if(digitalRead(selatan)==LOW){
+//    Serial.println("ARAH ANGIN : SELATAN");
+  }
+  else if(digitalRead(bd)==LOW){
+//    Serial.println("ARAH ANGIN : BARAT DAYA");
+    }
+  else if(digitalRead(barat)==LOW){
+//    Serial.println("ARAH ANGIN : BARAT");
+  }
+  else if(digitalRead(bl)==LOW){
+//    Serial.println("ARAH ANGIN : BARAT LAUT");
+    }
 
   // Rain Sensor
    nRainVal = analogRead(nRainIn);
@@ -228,51 +304,17 @@ void loop()
   else{
     strRaining = "NO";
   }
-  
+  /*
   Serial.print("Raining?: ");
   Serial.print(strRaining);  
   Serial.print("\t Moisture Level: ");
   Serial.print(nRainVal);
   Serial.print(",");
   Serial.println(fixSpeed);
+  */
   
-  if((sec%time_kirim ==0)||(kirim)){
-    sec = 0 ;
-    kirim = false;
-  // Sim 800L 
-  // initialize http service
   
-   gprsSerial.println("AT+HTTPINIT");
-   delay(2000); 
-   toSerial();
-   // Sim 800l Send data
-    snprintf(fulls,sizeof fulls,"at+httppara=\"URL\",\"http://antontds.com/Service/insert_from_form.php?id_arduino=%d&wind_speed=%d&note=%s\"",arduino_id,fixSpeed,noteku);
-//   gprsSerial.println("AT+HTTPPARA=\"URL\",\"http://antontds.com/Service/insert_from_form.php?id_arduino="" + id +""&wind_speed=""+wind+""&note=""+note+ ""\"");
-   gprsSerial.println(fulls);
-   delay(2000);
-   toSerial();
-
-   // set http action type 0 = GET, 1 = POST, 2 = HEAD
-   gprsSerial.println("AT+HTTPACTION=0");
-   delay(2000);
-   toSerial();
-
-
-   // read server response
-   gprsSerial.println("AT+HTTPREAD"); 
-   delay(1000);
-   toSerial();
-
-   gprsSerial.println("");
-   gprsSerial.println("AT+HTTPTERM");
-   toSerial();
-   delay(300);
-
-   gprsSerial.println("");
-   delay(2000);
-  }
   
-  sec++;
 }
 
 // Measure wind speed

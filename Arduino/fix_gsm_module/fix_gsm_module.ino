@@ -1,21 +1,21 @@
 #include <SoftwareSerial.h>
 
 String Arsp, Grsp;
-SoftwareSerial gprsSerial(10, 11); // RX, TX
-
+SoftwareSerial gprsSerial(5, 6); // RX, TX
+int sec=1,maxt=15;
 void setup() {
   // put your setup code here, to run once:
   
-  Serial.begin(9600);
+  Serial.begin(38400);
   Serial.println("Testing GSM SIM800L");
-  gprsSerial.begin(4800);
+  gprsSerial.begin(19200);
   //Set Awal 
   Serial.println("Config SIM900...");
   delay(2000);
   Serial.println("Done!...");
   gprsSerial.flush();
   Serial.flush();
-gprsSerial.println("AT+SAPBR=0,1");
+  gprsSerial.println("AT+SAPBR=0,1");
   delay(2000);
   toSerial();
   
@@ -49,6 +49,19 @@ gprsSerial.println("AT+SAPBR=0,1");
   gprsSerial.println("AT+SAPBR=2,1");
   delay(2000);
   toSerial();
+  gprsSerial.println("AT+HTTPINIT");
+   delay(2000); 
+   toSerial();
+   
+   gprsSerial.println("AT+HTTPSSL=0");
+   delay(2000); 
+   toSerial();
+   // initialize http service
+  
+   gprsSerial.println("at+httppara=\"cid\",1");
+   delay(2000); 
+   toSerial();
+   
 }
 void toSerial()
 {
@@ -62,20 +75,19 @@ int id = 2;
 char* noteku="War";
 char fulls[255];
 
-
+int time_t=15,t=1;
 void loop() {
   // put your main code here, to run repeatedly:
    // initialize http service
   
-   gprsSerial.println("AT+HTTPINIT");
-   delay(2000); 
-   toSerial();
    
     wind++;
-   
+   t++;
    // set http param value
    //sprintf(fulls,"test%d%d%s",id,wind,noteku);
    noteku="oke";
+   if(t%time_t==0){
+     t=0;
    snprintf(fulls,sizeof fulls,"at+httppara=\"URL\",\"http://antontds.com/Service/insert_from_form.php?id_arduino=%d&wind_speed=%d&note=%s\"",id,wind,noteku);
 //   gprsSerial.println("AT+HTTPPARA=\"URL\",\"http://antontds.com/Service/insert_from_form.php?id_arduino="" + id +""&wind_speed=""+wind+""&note=""+note+ ""\"");
    gprsSerial.println(fulls);
@@ -92,11 +104,13 @@ void loop() {
    delay(1000);
    toSerial();
 
-   gprsSerial.println("");
-   gprsSerial.println("AT+HTTPTERM");
-   toSerial();
-   delay(300);
-
+//   gprsSerial.println("");
+//   gprsSerial.println("AT+HTTPTERM");
+//   toSerial();
+//   delay(300);
+   
    gprsSerial.println("");
    delay(2000);
+   }
+   delay(1000);
 }
