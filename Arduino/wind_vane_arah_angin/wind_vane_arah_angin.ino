@@ -1,11 +1,11 @@
-#define utara 3
-#define tl 4
-#define timur 5
-#define tenggara 6
-#define selatan 7
-#define bd 8
-#define barat 9
-#define bl 10
+#define utara 0
+#define tl 13
+#define timur 2
+#define tenggara 3
+#define selatan 4
+#define bd 7
+#define barat 8
+#define bl 9
 
 void setup() 
 {

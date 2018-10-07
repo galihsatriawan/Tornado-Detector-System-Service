@@ -1,12 +1,12 @@
 #include <SoftwareSerial.h>
 
 String Arsp, Grsp;
-SoftwareSerial gprsSerial(5, 6); // RX, TX
+SoftwareSerial gprsSerial(10, 11); // RX, TX
 int sec=1,maxt=15;
 void setup() {
   // put your setup code here, to run once:
   
-  Serial.begin(38400);
+  Serial.begin(19200);
   Serial.println("Testing GSM SIM800L");
   gprsSerial.begin(19200);
   //Set Awal 

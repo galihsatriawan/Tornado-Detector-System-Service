@@ -1,13 +1,13 @@
 // Pin definitions
-# define windPin 2 // Receive the data from sensor
-#define utara 3
-#define tl 4
-#define timur 0
-#define tenggara 1
-#define selatan 7
-#define bd 8
-#define barat 9
-#define bl 10
+# define windPin 10 // Receive the data from sensor
+#define utara 0
+#define tl 13
+#define timur 2
+#define tenggara 3
+#define selatan 4
+#define bd 7
+#define barat 8
+#define bl 9
 
 // Sim 800L
 #include <SoftwareSerial.h>
@@ -136,9 +136,10 @@ Serial.println("Testing GSM SIM800L");
 
 // Set the pins
 
+//anemometer
+pinMode(10, INPUT);
+digitalWrite(10, HIGH);
 
-pinMode(2, INPUT);
-digitalWrite(2, HIGH);
  pinMode(utara,INPUT_PULLUP);
   pinMode(tl,INPUT_PULLUP);
   pinMode(timur,INPUT_PULLUP);
@@ -239,8 +240,8 @@ void loop()
 //  Serial.println(noteku);
   if((sec%time_kirim ==0)||(kirim)){
     //sec = 1 ;
-  gprsSerial.println("AT+CIPPING");
-   //delay(2000);
+  gprsSerial.println("AT");
+   delay(100);
    toSerial();
     
     kirim = false;
@@ -254,17 +255,19 @@ void loop()
 //   gprsSerial.println("AT+HTTPPARA=\"URL\",\"http://antontds.com/Service/insert_from_form.php?id_arduino="" + id +""&wind_speed=""+wind+""&note=""+note+ ""\"");
   Serial.println(fulls);
    gprsSerial.println(fulls);
-   delay(2000);
+   delay(3000);
    toSerial();
 
    // set http action type 0 = GET, 1 = POST, 2 = HEAD
    gprsSerial.println("AT+HTTPACTION=0");
-   delay(4000);
+   delay(3000);
    toSerial();
 
 
    // read server response
-   
+   gprsSerial.println("AT+HTTPREAD");
+   delay(3000);
+   toSerial();
    
   }
   

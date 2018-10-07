@@ -1,12 +1,12 @@
 // Pin definitions
-# define windPin 2 // Receive the data from sensor
+# define windPin 10 // Receive the data from sensor
 
 // Constants definitions
 const float pi = 3.14159265; // pi number
 int period = 1000; // Measurement period (miliseconds)
 int delaytime = 1000; // Time between samples (miliseconds)
 int radio = 80; // Distance from center windmill to outer cup (mm)
-int jml_celah = 22; // jumlah celah sensor
+int jml_celah = 20; // jumlah celah sensor
 
 // Variable definitions
 unsigned int Sample = 0; // Sample number
@@ -17,8 +17,8 @@ float speedwind = 0; // Wind speed (m/s)
 void setup()
 {
 // Set the pins
-pinMode(2, INPUT);
-digitalWrite(2, HIGH);
+pinMode(10, INPUT);
+digitalWrite(10, HIGH);
 
 // sets the serial port to 9600
 Serial.begin(9600);

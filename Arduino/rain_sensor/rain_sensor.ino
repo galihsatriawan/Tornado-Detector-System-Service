@@ -1,5 +1,5 @@
 int nRainIn = A1;
-int nRainDigitalIn = 11;
+int nRainDigitalIn = 12;
 int nRainVal;
 boolean bIsRaining = false;
 String strRaining;
@@ -7,7 +7,7 @@ String strRaining;
 
 void setup() {
   Serial.begin(9600);
-  pinMode(11,INPUT);
+  pinMode(12,INPUT);
 }
 void loop() {
   nRainVal = analogRead(nRainIn);
