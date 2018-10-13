@@ -1,8 +1,8 @@
 // Pin definitions
-# define windPin 10 // Receive the data from sensor
+# define windPin 2 // Receive the data from sensor
 #define utara 0
 #define tl 13
-#define timur 2
+#define timur 10
 #define tenggara 3
 #define selatan 4
 #define bd 7
@@ -37,6 +37,7 @@ int time_pulled = 0;
 bool pulled = false;
 const int maxTime = 1*10;
 const int jeda_putar = 1000*3;
+
 void tarik(){
   myservo.write(0);
   delay(jeda_putar);
@@ -59,8 +60,8 @@ Serial.begin(19200);
 
 
 //Anemometer
-pinMode(10, INPUT);
-digitalWrite(10, HIGH);
+pinMode(2, INPUT);
+digitalWrite(2, HIGH);
  pinMode(utara,INPUT_PULLUP);
   pinMode(tl,INPUT_PULLUP);
   pinMode(timur,INPUT_PULLUP);
@@ -114,11 +115,18 @@ void loop()
   Serial.print(RPM);
   Serial.print("; Wind speed: ");
   WindSpeed();
-  float fixSpeed = speedwind*3600/1000;
+  float fixSpeed = speedwind*1.0*3600/1000;
   Serial.print(fixSpeed);
   //Serial.print(" [m/s]");
   Serial.print(" [km/h]");
   Serial.println();
+  // tester ketika >= 2 km per jam
+  /* if(fixSpeed>=4){
+    Serial.println("Tarik");
+    pulled = true;
+    // start dari 0 derajar sampai 180 derajat 
+     tarik();
+  }*/
   if(fixSpeed<=20){
     
     Serial.println("Keterangan : Aman");
@@ -159,10 +167,8 @@ void loop()
   bIsRaining = !(digitalRead(nRainDigitalIn));
   
   if(bIsRaining){
-//    strRaining = "YES";
-//    pulled = true;
-    // start dari 0 derajar sampai 180 derajat 
-     tarik();
+    strRaining = "YES";
+    
   }
   else{
     strRaining = "NO";
@@ -192,12 +198,12 @@ void windvelocity()
 
 void RPMcalc()
 {
-  RPM=((counter/jml_celah)*60)/(period/1000); // Calculate revolutions per minute (RPM)
+  RPM=((counter*1.0/jml_celah)*60)/(period*1.0/1000); // Calculate revolutions per minute (RPM)
 }
 
 void WindSpeed()
 {
-  speedwind = ((2 * pi * radio * RPM)/60) / 1000; // Calculate wind speed on m/s
+  speedwind = ((2 * pi * radio * RPM *1.0)/60) / 1000; // Calculate wind speed on m/s
 }
 
 void addcount()
