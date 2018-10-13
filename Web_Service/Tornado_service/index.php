@@ -42,9 +42,17 @@
 			<td><input type="text" name="note" value="Warning"></td>
 		</tr>
 		<tr>
+			<td>Raining</td>
+			<td> </td>
+			<td><select name="raining">
+				<option >YES</option>
+				<option selected>NO</option>
+			</select></td>
+		</tr>
+		<tr>
 			<td>Moisture Level</td>
 			<td> </td>
-			<td><input type="number" name="moisture" step=4 value="233" ></td>
+			<td><input type="number" name="moisture" value="233" ></td>
 		</tr>
 		<tr>
 			<td>Wind Vane Direction</td>
@@ -62,7 +70,7 @@
 				</select>
 			 </td>
 		</tr>
-		
+
 		</form>
 	</table>
 

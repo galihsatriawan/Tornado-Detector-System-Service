@@ -31,6 +31,9 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     TextView txtWindSpeed;
+    TextView txtDirection;
+    TextView txtRaining;
+    TextView txtMoisture;
     TextView txtLocation;
     TextView txtIndication;
     Button btnRefresh;
@@ -41,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         txtWindSpeed = findViewById(R.id.wind_speed);
+        txtDirection= findViewById(R.id.direction);
+        txtRaining= findViewById(R.id.raining);
+        txtMoisture= findViewById(R.id.moisture);
+
         btnRefresh = findViewById(R.id.btn_refresh);
         txtLocation = findViewById(R.id.location);
         txtIndication= findViewById(R.id.indication);
@@ -153,6 +160,9 @@ public class MainActivity extends AppCompatActivity {
                 hideProgressDialog();
                 Log.d("Anton", "onResponse: "+data.getLokasi()+"--"+data.getVar_1());
                 txtWindSpeed.setText(data.getVar_1()+" km/hour");
+                txtDirection.setText(data.getVar_2());
+                txtRaining.setText(data.getVar_3());
+                txtMoisture.setText(data.getVar_4()+"");
                 txtLocation.setText(data.getLokasi()+"");
                 txtIndication.setText(data.getIndication());
 
@@ -161,6 +171,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Data> call, Throwable t) {
                 Log.d("Anton", "onFailure: "+t.getMessage());
+                String failed = "Connection Failed";
+                txtWindSpeed.setText(failed);
+                txtDirection.setText(failed);
+                txtRaining.setText(failed);
+                txtMoisture.setText(failed);
+                txtLocation.setText(failed);
+                txtIndication.setText(failed);
                 hideProgressDialog();
             }
         });

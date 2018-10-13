@@ -39,7 +39,7 @@ public class MyService extends Service {
         }catch (Exception e){
             e.printStackTrace();
         }
-        Intent intent= new Intent("id.ac.stiki.info");
+        Intent intent= new Intent("anton.tornado.detector.system");
         sendBroadcast(intent);
     }
     @Override

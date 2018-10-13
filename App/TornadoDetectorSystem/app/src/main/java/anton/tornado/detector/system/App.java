@@ -1,6 +1,7 @@
 package anton.tornado.detector.system;
 
 import android.app.Application;
+import android.content.Intent;
 
 import com.google.firebase.FirebaseApp;
 
@@ -13,5 +14,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         FirebaseApp.initializeApp(getApplicationContext());
+        startService(new Intent(this,MyService.class));
     }
 }

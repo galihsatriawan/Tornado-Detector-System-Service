@@ -15,7 +15,7 @@ if(true){
 	$respon['var_1']= $var_1[0]['var_1'];
 	$respon['var_2']= $var_1[0]['var_2'];
 	$respon['var_3']= $var_1[0]['var_3'];
-	// $respon['var_4']= $var_1[0]['var_4'];
+	$respon['var_4']= $var_1[0]['var_4'];
 	// $respon['var_5']= $var_1[0]['var_5'];
 	$respon['lokasi'] = $var_1[0]['lokasi'];
 	$respon['indication'] = $var_1[0]['indication'];

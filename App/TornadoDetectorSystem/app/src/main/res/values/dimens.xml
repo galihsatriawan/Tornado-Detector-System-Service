@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_nomal">8dp</dimen>
+    <dimen name="textJudul">20sp</dimen>
+    <dimen name="textSubJudul">15sp</dimen>
+</resources>

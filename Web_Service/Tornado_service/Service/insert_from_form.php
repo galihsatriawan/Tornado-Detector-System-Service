@@ -21,12 +21,14 @@ if(($_SERVER['REQUEST_METHOD'] == 'POST')||($_SERVER['REQUEST_METHOD'] == 'GET')
 	// What do we send for
 	$note = ($_SERVER['REQUEST_METHOD'] == 'POST')? $_POST['note'] : $_GET['note'];
 
-	// Moisture Level
-	$var_2 = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST['moisture']:$_GET['moisture'];
-
 	// Wind Vane Direction
-	$var_3 = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST['direction']:$_GET['direction'];
+	$var_2 = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST['direction']:$_GET['direction'];
 
+	//Raining Sensor
+	$var_3 = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST['raining']:$_GET['raining'];
+	// Moisture Level
+	$var_4 = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST['moisture']:$_GET['moisture'];
+	// var 
 	echo $var_1." ".$id." ".$note;
 	if($var_1>40){
 		// Send Notif
@@ -108,9 +110,9 @@ if(($_SERVER['REQUEST_METHOD'] == 'POST')||($_SERVER['REQUEST_METHOD'] == 'GET')
     else{
 		$indication = "Normal";
 	}
-	$fields = array("var_1","var_2","var_3","id_arduino","tgl_data","indication");
+	$fields = array("var_1","var_2","var_3","var_4","id_arduino","tgl_data","indication");
 	// print_r($fields);
-	$values = array($var_1,$var_2,$var_3,$id,$date,$indication);
+	$values = array($var_1,$var_2,$var_3,$var_4,$id,$date,$indication);
 	insert_data("tb_mst_data",$fields,$values);
 	$respon['Pesan']= "Berhasil"." ".$id;
 	echo json_encode($respon);
