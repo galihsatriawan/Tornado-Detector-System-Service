@@ -1,8 +1,8 @@
 // Pin definitions
-# define windPin 10 // Receive the data from sensor
+# define windPin 2 // Receive the data from sensor
 #define utara 0
 #define tl 13
-#define timur 2
+#define timur 10
 #define tenggara 3
 #define selatan 4
 #define bd 7
@@ -207,7 +207,7 @@ void loop()
   windvelocity();
   RPMcalc();
   WindSpeed();
-  float fixSpeed = speedwind*3600/1000;
+  float fixSpeed = speedwind*1.0*3600/1000;
   if(fixSpeed<=20){
     noteku = "Aman\"";
 //    Serial.println("Keterangan : Aman");
@@ -332,12 +332,12 @@ void windvelocity()
 
 void RPMcalc()
 {
-  RPM=((counter/jml_celah)*60)/(period/1000); // Calculate revolutions per minute (RPM)
+  RPM=((counter*1.0/jml_celah)*60)/(period*1.0/1000); // Calculate revolutions per minute (RPM)
 }
 
 void WindSpeed()
 {
-  speedwind = ((2 * pi * radio * RPM)/60) / 1000; // Calculate wind speed on m/s
+  speedwind = ((2 * pi * radio * RPM * 1.0)/60) / 1000; // Calculate wind speed on m/s
 }
 
 void addcount()
