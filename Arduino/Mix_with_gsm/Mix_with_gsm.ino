@@ -8,8 +8,9 @@
 #define bd 7
 #define barat 8
 #define bl 9
+char* direct;
 
-// Sim 800L
+// Sim 900a
 #include <SoftwareSerial.h>
 
 String Arsp, Grsp;
@@ -23,7 +24,7 @@ int nRainIn = A1;
 int nRainDigitalIn = 12;
 int nRainVal;
 boolean bIsRaining = false;
-String strRaining;
+char* strRaining;
 #include <Servo.h>          //include the servo library
 Servo myservo;              //create a servo object
 
@@ -44,6 +45,7 @@ int time_pulled = 0;
 bool pulled = false;
 const int maxTime = 1*10;
 const int jeda_putar = 1000*3;
+
 void tarik(){
   myservo.write(0);
   delay(jeda_putar);
@@ -65,10 +67,11 @@ void toSerial()
 
 void setup()
 {
+delay(10000);
 Serial.begin(38400);
 gprsSerial.begin(19200);
 //gprsSerial.println("AT+IPR=9600");
-// Sim 800L
+// Sim 900A
 Serial.println("Testing GSM SIM900A");
   
   //Set Awal 
@@ -253,27 +256,35 @@ void loop()
   // Arah Angin
   if(digitalRead(utara)==LOW){
 //    Serial.println("ARAH ANGIN : UTARA");
+    direct = "North";
     }
   else if(digitalRead(tl)==LOW){
 //    Serial.println("ARAH ANGIN : TIMUR LAUT");
+    direct = "Northeast";
     }
   else if(digitalRead(timur)==LOW){
 //    Serial.println("ARAH ANGIN : TIMUR");
+    direct = "East";
     }
   else if(digitalRead(tenggara)==LOW){
 //    Serial.println("ARAH ANGIN : TENGGARA");
+    direct = "Southeast";
   }
   else if(digitalRead(selatan)==LOW){
 //    Serial.println("ARAH ANGIN : SELATAN");
+    direct = "South";
   }
   else if(digitalRead(bd)==LOW){
 //    Serial.println("ARAH ANGIN : BARAT DAYA");
+    direct = "Southwest";
     }
   else if(digitalRead(barat)==LOW){
 //    Serial.println("ARAH ANGIN : BARAT");
+    direct = "West";
   }
   else if(digitalRead(bl)==LOW){
 //    Serial.println("ARAH ANGIN : BARAT LAUT");
+    direct = "Northwest";
     }
 
   // Rain Sensor
@@ -282,8 +293,8 @@ void loop()
   
   if(bIsRaining){
     kirim = false;
-    noteku= "Hujuan";
-    sendData(fixSpeed);
+//    noteku= "Hujuan";
+//    sendData(fixSpeed);
     strRaining = "YES";
   }
   else{
@@ -308,8 +319,12 @@ void sendData(int fixSpeed)
   
    // Sim 900A Send data
    
-   sprintf(fulls,"at+httppara=\"URL\",\"http://antontds.com/Service/insert_from_form.php?id_arduino=%d&wind_speed=%d&note=",arduino_id,fixSpeed);
+   sprintf(fulls,"at+httppara=\"URL\",\"http://antontds.com/Service/insert_from_form.php?id_arduino=%d&moisture=%d&wind_speed=%d&note=",arduino_id,nRainVal,fixSpeed);
    strcat(fulls,noteku);
+   strcat(fulls,"&raining=");
+   strcat(fulls,strRaining);
+   strcat(fulls,"&direction=");
+   strcat(fulls,direct);
    //snprintf(fulls,sizeof fulls,"at+httppara=\"URL\",\"http://antontds.com/Service/insert_from_form.php?id_arduino=%d&wind_speed=%d&note=%s\"",arduino_id,fixSpeed,noteku);
 //   gprsSerial.println("AT+HTTPPARA=\"URL\",\"http://antontds.com/Service/insert_from_form.php?id_arduino="" + id +""&wind_speed=""+wind+""&note=""+note+ ""\"");
   Serial.println(fulls);

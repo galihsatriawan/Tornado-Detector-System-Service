@@ -6,7 +6,7 @@ SoftwareSerial gsm(5,6); // RX, TX
 void setup() {
   // put your setup code here, to run once:
 
-  Serial.begin(38400);
+  Serial.begin(19200);
   Serial.println("Testing GSM SIM800L");
   gsm.begin(19200);
 

@@ -153,14 +153,14 @@ void loop()
   
 
   // Arah Angin
-  if(digitalRead(utara)==LOW){Serial.println("ARAH ANGIN : UTARA");}
-  else if(digitalRead(tl)==LOW){Serial.println("ARAH ANGIN : TIMUR LAUT");}
-  else if(digitalRead(timur)==LOW){Serial.println("ARAH ANGIN : TIMUR");}
-  else if(digitalRead(tenggara)==LOW){Serial.println("ARAH ANGIN : TENGGARA");}
-  else if(digitalRead(selatan)==LOW){Serial.println("ARAH ANGIN : SELATAN");}
-  else if(digitalRead(bd)==LOW){Serial.println("ARAH ANGIN : BARAT DAYA");}
-  else if(digitalRead(barat)==LOW){Serial.println("ARAH ANGIN : BARAT");}
-  else if(digitalRead(bl)==LOW){Serial.println("ARAH ANGIN : BARAT LAUT");}
+  if(digitalRead(utara)==LOW){Serial.println("ARAH ANGIN : NORTH");}
+  else if(digitalRead(tl)==LOW){Serial.println("ARAH ANGIN : NORTHEAST");}
+  else if(digitalRead(timur)==LOW){Serial.println("ARAH ANGIN : EAST");}
+  else if(digitalRead(tenggara)==LOW){Serial.println("ARAH ANGIN : SOUTHEAST");}
+  else if(digitalRead(selatan)==LOW){Serial.println("ARAH ANGIN : SOUTH");}
+  else if(digitalRead(bd)==LOW){Serial.println("ARAH ANGIN : SOUTHWEST");}
+  else if(digitalRead(barat)==LOW){Serial.println("ARAH ANGIN : WEST");}
+  else if(digitalRead(bl)==LOW){Serial.println("ARAH ANGIN : NORTHWEST");}
 
   // Rain Sensor
    nRainVal = analogRead(nRainIn);
