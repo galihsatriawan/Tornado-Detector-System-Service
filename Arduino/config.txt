@@ -43,10 +43,7 @@ at+httpinit
 
 
 OK
-at+httpssl=0
 
-
-OK
 at+httppara="cid",1
 
 

@@ -39,8 +39,30 @@
 		<tr>
 			<td>Note</td>
 			<td> </td>
-			<td><input type="text" name="note"></td>
+			<td><input type="text" name="note" value="Warning"></td>
 		</tr>
+		<tr>
+			<td>Moisture Level</td>
+			<td> </td>
+			<td><input type="number" name="moisture" step=4 value="233" ></td>
+		</tr>
+		<tr>
+			<td>Wind Vane Direction</td>
+			<td> </td>
+			<td>
+				<select name="direction">
+					<option selected>North</option>
+					<option>South</option>
+					<option>East</option>
+					<option>West</option>
+					<option>Northeast</option>
+					<option>Southeast</option>
+					<option>Southwest</option>
+					<option>Northwest</option>
+				</select>
+			 </td>
+		</tr>
+		
 		</form>
 	</table>
 

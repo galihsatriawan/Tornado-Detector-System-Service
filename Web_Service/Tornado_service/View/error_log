@@ -1,0 +1,6 @@
+[09-Sep-2018 18:47:00 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Class 'PDO' not found in /home/antm8648/public_html/Service/database_handler.php:12
+Stack trace:
+#0 /home/antm8648/public_html/Service/database_handler.php(26): pdo_connect()
+#1 /home/antm8648/public_html/View/input_arduino.php(11): select_data('tb_mst_arduino', Array, Array, Array)
+#2 {main}
+  thrown in /home/antm8648/public_html/Service/database_handler.php on line 12

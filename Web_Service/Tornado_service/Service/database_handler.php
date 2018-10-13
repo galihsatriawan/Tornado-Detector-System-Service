@@ -97,7 +97,7 @@
 			$str_values = convert_values_to_str($values); 
 
 			$sql = "INSERT INTO ".$tb_name."(".$str_fields.") VALUES (".$str_values.")";
-			// echo "$sql";	
+			echo "$sql";	
 			$conn->exec($sql);// exec tanpa pengembalian
 				
 		} catch (Exception $e) {

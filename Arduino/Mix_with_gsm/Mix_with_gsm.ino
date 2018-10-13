@@ -207,7 +207,18 @@ void loop()
   windvelocity();
   RPMcalc();
   WindSpeed();
+  
   float fixSpeed = speedwind*1.0*3600/1000;
+
+  
+  // tester ketika >= 2 km per jam
+   if(fixSpeed>=2){
+    Serial.println("Tarik");
+    pulled = true;
+    // start dari 0 derajar sampai 180 derajat 
+     tarik();
+  }
+  
   if(fixSpeed<=20){
     noteku = "Aman\"";
 //    Serial.println("Keterangan : Aman");

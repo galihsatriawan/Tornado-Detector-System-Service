@@ -10,7 +10,8 @@ include 'database_handler.php';
 // echo $arduino[0]['lokasi'];
 if(($_SERVER['REQUEST_METHOD'] == 'POST')||($_SERVER['REQUEST_METHOD'] == 'GET') &&isset($_GET['wind_speed'])){
 // if(true){
-    print_r($_GET);
+    // print_r($_GET);
+    // print_r($_POST);
     
 	$var_1 = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST['wind_speed']:$_GET['wind_speed'];
 	// $var_1 = 3.0;
@@ -19,6 +20,13 @@ if(($_SERVER['REQUEST_METHOD'] == 'POST')||($_SERVER['REQUEST_METHOD'] == 'GET')
 	$date = date("Y-m-d H:m:s");
 	// What do we send for
 	$note = ($_SERVER['REQUEST_METHOD'] == 'POST')? $_POST['note'] : $_GET['note'];
+
+	// Moisture Level
+	$var_2 = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST['moisture']:$_GET['moisture'];
+
+	// Wind Vane Direction
+	$var_3 = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST['direction']:$_GET['direction'];
+
 	echo $var_1." ".$id." ".$note;
 	if($var_1>40){
 		// Send Notif
@@ -100,8 +108,9 @@ if(($_SERVER['REQUEST_METHOD'] == 'POST')||($_SERVER['REQUEST_METHOD'] == 'GET')
     else{
 		$indication = "Normal";
 	}
-	$fields = array("var_1","id_arduino","tgl_data","indication");
-	$values = array($var_1,$id,$date,$indication);
+	$fields = array("var_1","var_2","var_3","id_arduino","tgl_data","indication");
+	// print_r($fields);
+	$values = array($var_1,$var_2,$var_3,$id,$date,$indication);
 	insert_data("tb_mst_data",$fields,$values);
 	$respon['Pesan']= "Berhasil"." ".$id;
 	echo json_encode($respon);
